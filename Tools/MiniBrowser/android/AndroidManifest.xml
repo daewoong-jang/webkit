@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.webkit.minibrowser"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="15"
+        android:targetSdkVersion="17" />
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name="org.webkit.launcher.WebKitWebProcess1"
+            android:process=":web1"
+            android:stopWithTask="true" >
+        </service>
+        <service
+            android:name="org.webkit.launcher.WebKitWebProcess2"
+            android:process=":web2"
+            android:stopWithTask="true" >
+        </service>
+        <service
+            android:name="org.webkit.launcher.WebKitWebProcess3"
+            android:process=":web3"
+            android:stopWithTask="true" >
+        </service>
+        <service
+            android:name="org.webkit.launcher.WebKitWebProcess4"
+            android:process=":web4"
+            android:stopWithTask="true" >
+        </service>
+        <service
+            android:name="org.webkit.launcher.WebKitWebProcess5"
+            android:process=":web5"
+            android:stopWithTask="true" >
+        </service>
+        <service
+            android:name="org.webkit.launcher.WebKitWebProcess6"
+            android:process=":web6"
+            android:stopWithTask="true" >
+        </service>
+        <service
+            android:name="org.webkit.launcher.WebKitWebProcess7"
+            android:process=":web7"
+            android:stopWithTask="true" >
+        </service>
+        <service
+            android:name="org.webkit.launcher.WebKitWebProcess8"
+            android:process=":web8"
+            android:stopWithTask="true" >
+        </service>
+    </application>
+
+</manifest>
