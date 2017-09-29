@@ -41,7 +41,7 @@
 #include <OpenGL/gl.h>
 #elif PLATFORM(WIN)
 #include "OpenGLESShims.h"
-#elif PLATFORM(GTK) || PLATFORM(WPE)
+#elif PLATFORM(GTK) || PLATFORM(WPE) || PLATFORM(ANDROID)
 #if USE(LIBEPOXY)
 // <epoxy/gl.h> already included above.
 #elif USE(OPENGL_ES_2)

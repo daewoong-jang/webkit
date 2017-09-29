@@ -25,6 +25,8 @@
 
 #pragma once
 
+#if ENABLE(NETWORK_CACHE)
+
 #include "NetworkCacheStorage.h"
 #include <WebCore/DOMCacheEngine.h>
 #include <wtf/Vector.h>
@@ -108,3 +110,5 @@ private:
 } // namespace CacheStorage
 
 } // namespace WebKit
+
+#endif

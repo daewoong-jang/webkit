@@ -45,6 +45,10 @@
 #include <wtf/MainThread.h>
 #include <wtf/text/Base64.h>
 
+#if PLATFORM(ANDROID)
+#include "SharedBuffer.h"
+#endif
+
 namespace WebCore {
 
 ResourceHandleCurlDelegate::ResourceHandleCurlDelegate(ResourceHandle* handle)
@@ -340,6 +344,11 @@ void ResourceHandleCurlDelegate::didReceiveAllHeaders(const CurlResponse& receiv
             redirectedRequest.setURL(newURL);
             ResourceResponse localResponse = response();
             if (m_handle->client())
+#if PLATFORM(ANDROID)
+                if (m_handle->client()->usesAsyncCallbacks())
+                    m_handle->client()->willSendRequestAsync(m_handle, WTFMove(redirectedRequest), WTFMove(localResponse));
+                else
+#endif
                 m_handle->client()->willSendRequest(m_handle, WTFMove(redirectedRequest), WTFMove(localResponse));
 
             m_firstRequest.setURL(newURL);
@@ -366,6 +375,11 @@ void ResourceHandleCurlDelegate::didReceiveAllHeaders(const CurlResponse& receiv
             }
         }
         CurlCacheManager::getInstance().didReceiveResponse(*m_handle, response());
+#if PLATFORM(ANDROID)
+        if (m_handle->client()->usesAsyncCallbacks())
+            m_handle->client()->didReceiveResponseAsync(m_handle, ResourceResponse(response()));
+        else
+#endif
         m_handle->client()->didReceiveResponse(m_handle, ResourceResponse(response()));
     }
 }
@@ -404,6 +418,11 @@ void ResourceHandleCurlDelegate::handleLocalReceiveResponse()
     m_didNotifyResponse = true;
 
     if (m_handle->client())
+#if PLATFORM(ANDROID)
+        if (m_handle->client()->usesAsyncCallbacks())
+            m_handle->client()->didReceiveResponseAsync(m_handle, ResourceResponse(response()));
+        else
+#endif
         m_handle->client()->didReceiveResponse(m_handle, ResourceResponse(response()));
 }
 
@@ -501,6 +520,11 @@ void ResourceHandleCurlDelegate::handleDataURL()
 
     if (base64) {
         data = decodeURLEscapeSequences(data);
+#if PLATFORM(ANDROID)
+        if (m_handle->client()->usesAsyncCallbacks())
+            m_handle->client()->didReceiveResponseAsync(m_handle, WTFMove(response));
+        else
+#endif
         m_handle->client()->didReceiveResponse(m_handle, WTFMove(response));
 
         // didReceiveResponse might cause the client to be deleted.
@@ -512,6 +536,11 @@ void ResourceHandleCurlDelegate::handleDataURL()
     } else {
         TextEncoding encoding(charset);
         data = decodeURLEscapeSequences(data, encoding);
+#if PLATFORM(ANDROID)
+        if (m_handle->client()->usesAsyncCallbacks())
+            m_handle->client()->didReceiveResponseAsync(m_handle, WTFMove(response));
+        else
+#endif
         m_handle->client()->didReceiveResponse(m_handle, WTFMove(response));
 
         // didReceiveResponse might cause the client to be deleted.

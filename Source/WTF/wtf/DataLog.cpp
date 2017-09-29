@@ -34,7 +34,7 @@
 #include <mutex>
 #include <thread>
 
-#if OS(UNIX) || OS(DARWIN)
+#if OS(UNIX) || OS(DARWIN) || PLATFORM(ANDROID)
 #include <unistd.h>
 #endif
 

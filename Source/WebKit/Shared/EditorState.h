@@ -116,6 +116,17 @@ struct EditorState {
     PostLayoutData& postLayoutData();
 #endif // PLATFORM(IOS) || PLATFORM(GTK) || PLATFORM(MAC)
 
+#if PLATFORM(ANDROID)
+    String editableText;
+    WebCore::IntRect caretRectAtStart;
+    WebCore::IntRect caretRectAtEnd;
+    int selectionRangeStart { 0 };
+    int selectionRangeEnd { 0 };
+    String selectedText;
+    int compositionRangeStart { 0 };
+    int compositionRangeEnd { 0 };
+#endif
+
     void encode(IPC::Encoder&) const;
     static bool decode(IPC::Decoder&, EditorState&);
 

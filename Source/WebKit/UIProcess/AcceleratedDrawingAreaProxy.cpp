@@ -271,4 +271,16 @@ void AcceleratedDrawingAreaProxy::destroyNativeSurfaceHandleForCompositing()
 }
 #endif
 
+#if USE(COORDINATED_GRAPHICS_MULTIPROCESS)
+void AcceleratedDrawingAreaProxy::adjustTransientZoom(double scale, FloatPoint origin)
+{
+    m_webPageProxy.process().send(Messages::DrawingArea::AdjustTransientZoom(scale, origin), m_webPageProxy.pageID());
+}
+
+void AcceleratedDrawingAreaProxy::commitTransientZoom(double scale, FloatPoint origin)
+{
+    m_webPageProxy.process().send(Messages::DrawingArea::CommitTransientZoom(scale, origin), m_webPageProxy.pageID());
+}
+#endif
+
 } // namespace WebKit

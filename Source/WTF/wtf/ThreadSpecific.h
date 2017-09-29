@@ -49,7 +49,7 @@
 #if USE(PTHREADS)
 #include <pthread.h>
 
-#if OS(HURD)
+#if OS(HURD) || PLATFORM(ANDROID)
 // PTHREAD_KEYS_MAX is not defined in bionic nor in Hurd, so explicitly define it here.
 #define PTHREAD_KEYS_MAX 1024
 #else
@@ -62,7 +62,7 @@
 
 namespace WTF {
 
-#if OS(WINDOWS) && CPU(X86)
+#if OS(WINDOWS) && CPU(X86) && !USE(PTHREADS)
 #define THREAD_SPECIFIC_CALL __stdcall
 #else
 #define THREAD_SPECIFIC_CALL

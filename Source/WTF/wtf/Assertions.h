@@ -469,6 +469,11 @@ WTF_EXPORT_PRIVATE NO_RETURN_DUE_TO_CRASH void WTFCrashWithSecurityImplication()
 } while (0)
 #endif
 
+#if COMPILER(MSVC)
+#undef RELEASE_LOG_ERROR
+#define RELEASE_LOG_ERROR(format, ...) LOG_ERROR(__VA_ARGS__)
+#endif
+
 
 /* RELEASE_ASSERT */
 

@@ -142,6 +142,9 @@ public:
 
     void setNeedsVisibleRectAdjustment();
     void purgeBackingStores();
+#if USE(COORDINATED_GRAPHICS_MULTIPROCESS)
+    void reset();
+#endif
 
     CoordinatedGraphicsLayer* findFirstDescendantWithContentsRecursively();
 

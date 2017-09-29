@@ -132,7 +132,9 @@ private:
     NetworkRTCProvider& rtcProvider();
 #endif
 
+#if ENABLE(NETWORK_CACHE)
     CacheStorageEngineConnection& cacheStorageConnection();
+#endif
 
     Ref<IPC::Connection> m_connection;
 
@@ -146,7 +148,9 @@ private:
 
     bool m_captureExtraNetworkLoadMetricsEnabled { false };
 
+#if ENABLE(NETWORK_CACHE)
     RefPtr<CacheStorageEngineConnection> m_cacheStorageConnection;
+#endif
 };
 
 } // namespace WebKit

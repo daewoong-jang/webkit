@@ -987,8 +987,25 @@ void CoordinatedGraphicsLayer::purgeBackingStores()
 
     releaseImageBackingIfNeeded();
 
+#if !USE(COORDINATED_GRAPHICS_MULTIPROCESS)
     didChangeLayerState();
+#endif
 }
+
+#if USE(COORDINATED_GRAPHICS_MULTIPROCESS)
+void CoordinatedGraphicsLayer::reset()
+{
+    m_layerState.changeMask = ~0;
+
+    m_layerState.tilesToRemove.clear();
+
+    didChangeLayerState();
+    didChangeAnimations();
+    didChangeChildren();
+    didChangeFilters();
+    didChangeImageBacking();
+}
+#endif
 
 void CoordinatedGraphicsLayer::setCoordinator(CoordinatedGraphicsLayerClient* coordinator)
 {

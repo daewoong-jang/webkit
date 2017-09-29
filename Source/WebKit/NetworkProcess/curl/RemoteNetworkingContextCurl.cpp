@@ -47,9 +47,17 @@ bool RemoteNetworkingContext::isValid() const
     return true;
 }
 
-void RemoteNetworkingContext::ensurePrivateBrowsingSession(WebsiteDataStoreParameters&&)
+void RemoteNetworkingContext::ensurePrivateBrowsingSession(WebsiteDataStoreParameters&& parameters)
 {
-    notImplemented();
+    ASSERT(parameters.sessionID.isEphemeral());
+
+    if (NetworkStorageSession::storageSession(parameters.sessionID))
+        return;
+
+    NetworkStorageSession::ensurePrivateBrowsingSession(parameters.sessionID, String::number(parameters.sessionID.sessionID()));
+#if USE(NETWORK_SESSION)
+    SessionTracker::setSession(parameters.sessionID, NetworkSession::create(parameters.sessionID));
+#endif
 }
 
 void RemoteNetworkingContext::ensureWebsiteDataStoreSession(WebsiteDataStoreParameters&&)
@@ -59,12 +67,10 @@ void RemoteNetworkingContext::ensureWebsiteDataStoreSession(WebsiteDataStorePara
 
 NetworkStorageSession& RemoteNetworkingContext::storageSession() const
 {
+    NetworkStorageSession* session = NetworkStorageSession::storageSession(m_sessionID);
+    if (session)
+        return *session;
     return NetworkStorageSession::defaultStorageSession();
-}
-
-ResourceError RemoteNetworkingContext::blockedError(const ResourceRequest& request) const
-{
-    return ResourceError();
 }
 
 }

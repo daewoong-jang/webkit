@@ -57,6 +57,9 @@ public:
 #if PLATFORM(WPE)
         WPE,
 #endif
+#if PLATFORM(ANDROID)
+        Android,
+#endif
     };
 
     virtual Type type() const = 0;

@@ -117,9 +117,11 @@ bool GraphicsContext3D::reshapeFBOs(const IntSize& size)
         ::glBindTexture(GL_TEXTURE_2D, 0);
     }
 
+#if !USE(COORDINATED_GRAPHICS_MULTIPROCESS)
     ::glBindTexture(GL_TEXTURE_2D, m_intermediateTexture);
     ::glTexImage2D(GL_TEXTURE_2D, 0, m_internalColorFormat, width, height, 0, colorFormat, GL_UNSIGNED_BYTE, 0);
     ::glBindTexture(GL_TEXTURE_2D, 0);
+#endif
 #endif
 
     Extensions3DOpenGLES& extensions = static_cast<Extensions3DOpenGLES&>(getExtensions());

@@ -142,6 +142,7 @@ set(WebCore_SYSTEM_INCLUDE_DIRECTORIES
 
 set(WebCore_IDL_INCLUDES
     animation
+    crypto
     css
     dom
     fileapi
@@ -157,12 +158,14 @@ set(WebCore_IDL_INCLUDES
     Modules/airplay
     Modules/cache
     Modules/credentials
+    Modules/encryptedmedia
     Modules/encryptedmedia/legacy
     Modules/entriesapi
     Modules/fetch
     Modules/geolocation
     Modules/indexeddb
     Modules/mediasession
+    Modules/mediasource
     Modules/mediastream
     Modules/notifications
     Modules/paymentrequest
@@ -175,6 +178,8 @@ set(WebCore_IDL_INCLUDES
     Modules/webvr
 
     bindings/js
+
+    crypto/parameters
 
     html/canvas
     html/shadow

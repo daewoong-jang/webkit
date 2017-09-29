@@ -46,6 +46,10 @@
 #define GL_UNSIGNED_INT_8_8_8_8_REV 0x8367
 #endif
 
+#if PLATFORM(ANDROID)
+#include "GLContextEGLAndroid.h"
+#endif
+
 namespace WebCore {
 
 BitmapTextureGL* toBitmapTextureGL(BitmapTexture* texture)
@@ -315,6 +319,10 @@ void BitmapTextureGL::bindAsSurface()
 
 BitmapTextureGL::~BitmapTextureGL()
 {
+#if PLATFORM(ANDROID)
+    if (GLContextEGLAndroid::isContextLost())
+        return;
+#endif
     if (m_id)
         glDeleteTextures(1, &m_id);
 

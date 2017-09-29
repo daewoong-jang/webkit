@@ -637,6 +637,12 @@ public:
     CGRect boundsOfLayerInLayerBackedWindowCoordinates(CALayer *) const;
 #endif // PLATFORM(MAC)
 
+#if PLATFORM(ANDROID)
+    void setComposition(const String&, Vector<WebCore::CompositionUnderline>&, int32_t selectionStart, int32_t selectionEnd, int32_t replacementStart, int32_t replacementEnd);
+    void confirmComposition(const String&);
+    void finishComposition();
+    void cancelComposition();
+#endif
 #if PLATFORM(GTK)
     PlatformWidget viewWidget();
     const WebCore::Color& backgroundColor() const { return m_backgroundColor; }
@@ -940,7 +946,7 @@ public:
     void beginPrinting(WebFrameProxy*, const PrintInfo&);
     void endPrinting();
     void computePagesForPrinting(WebFrameProxy*, const PrintInfo&, Ref<ComputedPagesCallback>&&);
-#if PLATFORM(COCOA)
+#if PLATFORM(COCOA) || PLATFORM(ANDROID)
     void drawRectToImage(WebFrameProxy*, const PrintInfo&, const WebCore::IntRect&, const WebCore::IntSize&, Ref<ImageCallback>&&);
     void drawPagesToPDF(WebFrameProxy*, const PrintInfo&, uint32_t first, uint32_t count, Ref<DataCallback>&&);
 #if PLATFORM(IOS)
@@ -1737,7 +1743,7 @@ private:
 
     WebCore::ActivityState::Flags m_activityState { WebCore::ActivityState::NoFlags };
     bool m_viewWasEverInWindow { false };
-#if PLATFORM(IOS)
+#if PLATFORM(IOS) || PLATFORM(ANDROID)
     bool m_allowsMediaDocumentInlinePlayback { false };
     bool m_alwaysRunsAtForegroundPriority { false };
     ProcessThrottler::ForegroundActivityToken m_activityToken;

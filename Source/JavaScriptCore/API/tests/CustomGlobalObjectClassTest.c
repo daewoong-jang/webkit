@@ -23,6 +23,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <wtf/Platform.h>
+
 #include "CustomGlobalObjectClassTest.h"
 
 #include <JavaScriptCore/JSObjectRefPrivate.h>
@@ -30,6 +32,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#if OS(WINDOWS) && !USE(CF)
+#include <windows.h>
+#endif
 
 extern bool assertTrue(bool value, const char* message);
 

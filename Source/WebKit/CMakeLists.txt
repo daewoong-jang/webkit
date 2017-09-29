@@ -811,7 +811,11 @@ macro(ADD_WEBKIT_PREFIX_HEADER _target)
         if (${OLD_COMPILE_FLAGS} STREQUAL "OLD_COMPILE_FLAGS-NOTFOUND")
             set(OLD_COMPILE_FLAGS "")
         endif ()
+        if (NOT MSVC)
         set_target_properties(${_target} PROPERTIES COMPILE_FLAGS "${OLD_COMPILE_FLAGS} -include ${WEBKIT_DIR}/WebKit2Prefix.h")
+        else ()
+        set_target_properties(${_target} PROPERTIES COMPILE_FLAGS "/Yu\"WebKit2Prefix.h\" /FI\"WebKit2Prefix.h\" /FI\"WebCorePrefix.h\" /Fp\"WebKit2Prefix.pch\"")
+        endif ()
     endif ()
 endmacro()
 
@@ -843,6 +847,13 @@ macro(GENERATE_MESSAGE_SOURCES _output_source _input_files)
     endforeach ()
 endmacro()
 GENERATE_MESSAGE_SOURCES(WebKit_DERIVED_SOURCES "${WebKit_MESSAGES_IN_FILES}")
+
+if (MSVC)
+    list(APPEND WebKit2_SOURCES WebKit2Prefix.cpp)
+    set_source_files_properties(WebKit2Prefix.cpp PROPERTIES COMPILE_FLAGS "/Yc\"WebKit2Prefix.h\" /Fp\"WebKit2Prefix.pch\"" OBJECT_OUTPUTS "WebKit2Prefix.pch")
+    # WebKit.dll is not expected to export the symbols in WebCore that have been marked as WEBCORE_EXPORT
+    add_definitions(-DWEBCORE_EXPORT=WTF_HIDDEN_DECLARATION)
+endif ()
 
 set(WebKit_AUTOMATION_PROTOCOL_GENERATOR_SCRIPTS
     ${PROTOCOL_GENERATOR_SCRIPTS_DIR}/generate-inspector-protocol-bindings.py
@@ -901,13 +912,19 @@ WEBKIT_FRAMEWORK(WebKit)
 add_dependencies(WebKit WebCore ${WEBKIT_EXTRA_DEPENDENCIES})
 ADD_WEBKIT_PREFIX_HEADER(WebKit)
 
+if (NOT ANDROID)
+
 if (COMPILER_IS_GCC_OR_CLANG AND NOT APPLE)
     target_link_libraries(WebKit -Wl,--start-group WebCore WebCoreDerivedSources -Wl,--end-group)
 endif ()
 
+endif () # NOT ANDROID
+
 if (WebKit_VERSION_SCRIPT)
-    WEBKIT_ADD_TARGET_PROPERTIES(WebKit LINK_FLAGS "${WebKit_VERSION_SCRIPT}")
+    WEBKIT_ADD_TARGET_PROPERTIES(WebKit2 LINK_FLAGS "${WebKit2_VERSION_SCRIPT}")
 endif ()
+
+if (NOT DISABLE_WEBKIT_PROCESS_EXECUTABLES)
 
 add_executable(WebProcess ${WebProcess_SOURCES})
 ADD_WEBKIT_PREFIX_HEADER(WebProcess)
@@ -998,3 +1015,5 @@ else ()
         RUNTIME DESTINATION "${LIBEXEC_INSTALL_DIR}"
     )
 endif ()
+
+endif () # NOT DISABLE_WEBKIT_PROCESS_EXECUTABLES

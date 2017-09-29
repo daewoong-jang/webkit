@@ -101,7 +101,7 @@ ImageBufferData::~ImageBufferData()
     if (m_texture)
         glDeleteTextures(1, &m_texture);
 
-#if USE(COORDINATED_GRAPHICS_THREADED)
+#if USE(COORDINATED_GRAPHICS_THREADED) && !USE(COORDINATED_GRAPHICS_MULTIPROCESS)
     if (m_compositorTexture)
         glDeleteTextures(1, &m_compositorTexture);
 #endif
@@ -112,7 +112,8 @@ ImageBufferData::~ImageBufferData()
 }
 
 #if ENABLE(ACCELERATED_2D_CANVAS)
-#if USE(COORDINATED_GRAPHICS_THREADED)
+#if USE(COORDINATED_GRAPHICS_MULTIPROCESS)
+#elif USE(COORDINATED_GRAPHICS_THREADED)
 void ImageBufferData::createCompositorBuffer()
 {
     auto* context = PlatformDisplay::sharedDisplayForCompositing().sharingGLContext();

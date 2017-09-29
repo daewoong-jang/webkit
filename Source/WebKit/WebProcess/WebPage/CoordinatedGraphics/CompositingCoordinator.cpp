@@ -460,6 +460,20 @@ void CompositingCoordinator::clearUpdateAtlases()
     m_atlasesToRemove.clear();
 }
 
+#if USE(COORDINATED_GRAPHICS_MULTIPROCESS)
+void CompositingCoordinator::reset()
+{
+    clearPendingStateChanges();
+    purgeBackingStores();
+
+    for (auto& registeredLayer : m_registeredLayers.values()) {
+        registeredLayer->reset();
+        m_state.layersToCreate.append(registeredLayer->id());
+        registeredLayer->setNeedsVisibleRectAdjustment();
+    }
+}
+#endif
+
 } // namespace WebKit
 
 #endif // USE(COORDINATED_GRAPHICS)

@@ -35,7 +35,9 @@
 #include <wtf/RunLoop.h>
 
 using namespace PAL;
+#if ENABLE(SERVICE_WORKER)
 using namespace WebCore;
+#endif
 
 namespace WebKit {
 

@@ -88,6 +88,10 @@ public:
     };
     typedef std::unique_ptr<WebSoupRequestAsyncData> CustomProtocol;
 #endif
+#if PLATFORM(ANDROID)
+    struct AWKCustomProtocol { };
+    typedef std::unique_ptr<AWKCustomProtocol> CustomProtocol;
+#endif
 
     uint64_t addCustomProtocol(CustomProtocol&&);
     void removeCustomProtocol(uint64_t customProtocolID);

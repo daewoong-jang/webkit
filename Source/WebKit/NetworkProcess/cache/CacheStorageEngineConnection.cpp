@@ -27,6 +27,8 @@
 #include "config.h"
 #include "CacheStorageEngineConnection.h"
 
+#if ENABLE(NETWORK_CACHE)
+
 #include "NetworkConnectionToWebProcess.h"
 #include "WebCacheStorageConnectionMessages.h"
 #include "WebCoreArgumentCoders.h"
@@ -140,3 +142,5 @@ void CacheStorageEngineConnection::engineRepresentation(PAL::SessionID sessionID
 }
 
 }
+
+#endif

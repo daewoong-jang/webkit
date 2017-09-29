@@ -54,6 +54,8 @@ public:
     NativeWebWheelEvent(GdkEvent*, WebWheelEvent::Phase, WebWheelEvent::Phase momentumPhase);
 #elif PLATFORM(WPE)
     NativeWebWheelEvent(struct wpe_input_axis_event*, float deviceScaleFactor);
+#elif PLATFORM(ANDROID)
+    NativeWebWheelEvent(WebWheelEvent&&);
 #endif
 
 #if USE(APPKIT)
@@ -64,6 +66,8 @@ public:
     const void* nativeEvent() const { return 0; }
 #elif PLATFORM(WPE)
     const void* nativeEvent() const { return nullptr; }
+#elif PLATFORM(ANDROID)
+    const void* nativeEvent() const { return this; }
 #endif
 
 private:

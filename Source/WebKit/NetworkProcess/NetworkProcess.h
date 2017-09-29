@@ -74,8 +74,8 @@ class Cache;
 
 class NetworkProcess : public ChildProcess, private DownloadManager::Client {
     WTF_MAKE_NONCOPYABLE(NetworkProcess);
-    friend class NeverDestroyed<NetworkProcess>;
-    friend class NeverDestroyed<DownloadManager>;
+    friend class WTF::NeverDestroyed<NetworkProcess>;
+    friend class WTF::NeverDestroyed<DownloadManager>;
 public:
     static NetworkProcess& singleton();
 

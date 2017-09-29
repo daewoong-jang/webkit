@@ -326,7 +326,7 @@ messages -> WebPage LegacyReceiver {
     BeginPrinting(uint64_t frameID, struct WebKit::PrintInfo printInfo)
     EndPrinting()
     ComputePagesForPrinting(uint64_t frameID, struct WebKit::PrintInfo printInfo, WebKit::CallbackID callbackID)
-#if PLATFORM(COCOA)
+#if PLATFORM(COCOA) || PLATFORM(ANDROID)
     DrawRectToImage(uint64_t frameID, struct WebKit::PrintInfo printInfo, WebCore::IntRect rect, WebCore::IntSize imageSize, WebKit::CallbackID callbackID)
     DrawPagesToPDF(uint64_t frameID, struct WebKit::PrintInfo printInfo, uint32_t first, uint32_t count, WebKit::CallbackID callbackID)
 #if PLATFORM(IOS)
@@ -404,6 +404,12 @@ messages -> WebPage LegacyReceiver {
 
     SetViewportSizeForCSSViewportUnits(std::optional<WebCore::IntSize> viewportSize)
 
+#if PLATFORM(ANDROID)
+    SetComposition(String text, Vector<WebCore::CompositionUnderline> underlines, uint64_t selectionStart, uint64_t selectionEnd, uint64_t replacementStart, uint64_t replacementEnd)
+    ConfirmComposition(String text)
+    FinishComposition()
+    CancelComposition()
+#endif
 #if PLATFORM(COCOA)
     HandleAlternativeTextUIResult(String result)
 #endif

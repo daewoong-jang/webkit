@@ -964,7 +964,7 @@ bool DragController::startDrag(Frame& src, const DragState& state, DragOperation
                 }
             } else {
                 if (mustUseLegacyDragClient) {
-#if PLATFORM(COCOA) || PLATFORM(GTK)
+#if PLATFORM(COCOA) || PLATFORM(GTK) || PLATFORM(ANDROID)
                     src.editor().writeSelectionToPasteboard(dataTransfer.pasteboard());
 #else
                     // FIXME: Convert all other platforms to match Mac and delete this.

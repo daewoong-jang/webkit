@@ -52,6 +52,16 @@ void EditorState::encode(IPC::Encoder& encoder) const
     encoder << lastMarkedRect;
     encoder << markedText;
 #endif
+
+#if PLATFORM(ANDROID)
+    encoder << editableText;
+    encoder << caretRectAtStart;
+    encoder << caretRectAtEnd;
+    encoder << selectionRangeStart;
+    encoder << selectionRangeEnd;
+    encoder << compositionRangeStart;
+    encoder << compositionRangeEnd;
+#endif
 }
 
 bool EditorState::decode(IPC::Decoder& decoder, EditorState& result)
@@ -96,6 +106,23 @@ bool EditorState::decode(IPC::Decoder& decoder, EditorState& result)
     if (!decoder.decode(result.lastMarkedRect))
         return false;
     if (!decoder.decode(result.markedText))
+        return false;
+#endif
+
+#if PLATFORM(ANDROID)
+    if (!decoder.decode(result.editableText))
+        return false;
+    if (!decoder.decode(result.caretRectAtStart))
+        return false;
+    if (!decoder.decode(result.caretRectAtEnd))
+        return false;
+    if (!decoder.decode(result.selectionRangeStart))
+        return false;
+    if (!decoder.decode(result.selectionRangeEnd))
+        return false;
+    if (!decoder.decode(result.compositionRangeStart))
+        return false;
+    if (!decoder.decode(result.compositionRangeEnd))
         return false;
 #endif
 

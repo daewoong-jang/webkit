@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <jpeglib.h>
 #include <setjmp.h>
+#include <wtf/Vector.h>
 
 namespace WebCore {
 

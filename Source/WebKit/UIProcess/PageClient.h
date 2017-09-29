@@ -196,6 +196,10 @@ public:
 #endif
 #endif
 
+#if PLATFORM(ANDROID)
+    virtual void updateTextInputState() = 0;
+#endif
+
     virtual WebCore::FloatRect convertToDeviceSpace(const WebCore::FloatRect&) = 0;
     virtual WebCore::FloatRect convertToUserSpace(const WebCore::FloatRect&) = 0;
     virtual WebCore::IntPoint screenToRootView(const WebCore::IntPoint&) = 0;

@@ -44,6 +44,9 @@ struct CoordinatedGraphicsState;
 namespace WebKit {
 
 class WebPage;
+#if USE(COORDINATED_GRAPHICS_MULTIPROCESS)
+class CoordinatedCompositorHostProxy;
+#endif
 
 class ThreadedCoordinatedLayerTreeHost final : public CoordinatedLayerTreeHost, public AcceleratedSurface::Client {
 public:
@@ -141,7 +144,11 @@ private:
 
     CompositorClient m_compositorClient;
     std::unique_ptr<AcceleratedSurface> m_surface;
+#if USE(COORDINATED_GRAPHICS_MULTIPROCESS)
+    std::unique_ptr<CoordinatedCompositorHostProxy> m_compositor;
+#else
     RefPtr<ThreadedCompositor> m_compositor;
+#endif
     SimpleViewportController m_viewportController;
     float m_lastPageScaleFactor { 1 };
     WebCore::IntPoint m_lastScrollPosition;

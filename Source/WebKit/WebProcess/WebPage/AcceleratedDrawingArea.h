@@ -78,6 +78,10 @@ protected:
     void resetUpdateAtlasForTesting() override;
 #endif
 
+#if USE(COORDINATED_GRAPHICS_MULTIPROCESS)
+    virtual bool ignoreViewportChanges() const override { return m_inUpdateBackingStoreState; };
+#endif
+
 #if USE(COORDINATED_GRAPHICS) || USE(TEXTURE_MAPPER)
     void deviceOrPageScaleFactorChanged() override;
 #endif

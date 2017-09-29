@@ -104,12 +104,20 @@ template<class Decoder> std::optional<WebsitePolicies> WebsitePolicies::decode(D
     if (!customHeaderFields)
         return std::nullopt;
 
+#if COMPILER(MSVC)
+    WebsitePolicies websitePolicies;
+    websitePolicies.contentBlockersEnabled = WTFMove(*contentBlockersEnabled);
+    websitePolicies.allowedAutoplayQuirks = WTFMove(*allowedAutoplayQuirks);
+    websitePolicies.autoplayPolicy = WTFMove(*autoplayPolicy);
+    return websitePolicies;
+#else
     return { {
         WTFMove(*contentBlockersEnabled),
         WTFMove(*allowedAutoplayQuirks),
         WTFMove(*autoplayPolicy),
         WTFMove(*customHeaderFields),
     } };
+#endif
 }
 
 } // namespace WebKit

@@ -24,6 +24,7 @@ set(ALL_PORTS
     Mac
     WPE
     WinCairo
+    Android
 )
 set(PORT "NOPORT" CACHE STRING "choose which WebKit port to build (one of ${ALL_PORTS})")
 

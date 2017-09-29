@@ -46,6 +46,10 @@
 #include "PlatformDisplayWPE.h"
 #endif
 
+#if PLATFORM(ANDROID)
+#include "PlatformDisplayAndroid.h"
+#endif
+
 #if PLATFORM(GTK)
 #include <gdk/gdk.h>
 #endif
@@ -88,6 +92,8 @@ std::unique_ptr<PlatformDisplay> PlatformDisplay::createPlatformDisplay()
 #endif
 #elif PLATFORM(WIN)
     return std::make_unique<PlatformDisplayWin>();
+#elif PLATFORM(ANDROID)
+    return std::make_unique<PlatformDisplayAndroid>();
 #endif
 
 #if PLATFORM(WAYLAND)

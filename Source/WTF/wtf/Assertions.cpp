@@ -75,6 +75,12 @@
 #include <unistd.h>
 #endif
 
+#if PLATFORM(ANDROID)
+#include <cxxabi.h>
+#include <dlfcn.h>
+#include <android/log.h>
+#endif
+
 extern "C" {
 
 static void logToStderr(const char* buffer)
@@ -85,7 +91,11 @@ static void logToStderr(const char* buffer)
     asl_log(0, 0, ASL_LEVEL_NOTICE, "%s", buffer);
 #pragma clang diagnostic pop
 #endif
+#if !PLATFORM(ANDROID)
     fputs(buffer, stderr);
+#else
+    __android_log_write(ANDROID_LOG_DEBUG, "WTF", buffer);
+#endif
 }
 
 static const constexpr unsigned InitialBufferSize { 256 };
@@ -140,7 +150,11 @@ static void vprintf_stderr_common(const char* format, va_list args)
         } while (size > 1024);
     }
 #endif
+#if !PLATFORM(ANDROID)
     vfprintf(stderr, format, args);
+#else
+    __android_log_vprint(ANDROID_LOG_DEBUG, "WTF", format, args);
+#endif
 }
 
 #if COMPILER(GCC_OR_CLANG)
@@ -162,6 +176,7 @@ static void vprintf_stderr_with_prefix(const char* prefix, const char* format, v
 
 static void vprintf_stderr_with_trailing_newline(const char* format, va_list args)
 {
+#if !PLATFORM(ANDROID)
     size_t formatLength = strlen(format);
     if (formatLength && format[formatLength - 1] == '\n') {
         vprintf_stderr_common(format, args);
@@ -174,6 +189,9 @@ static void vprintf_stderr_with_trailing_newline(const char* format, va_list arg
     formatWithNewline[formatLength + 1] = 0;
 
     vprintf_stderr_common(formatWithNewline.get(), args);
+#else
+    vprintf_stderr_common(format, args);
+#endif
 }
 
 #if COMPILER(GCC_OR_CLANG)
@@ -197,7 +215,11 @@ static void printCallSite(const char* file, int line, const char* function)
     // By using this format, which matches the format used by MSVC for compiler errors, developers
     // using Visual Studio can double-click the file/line number in the Output Window to have the
     // editor navigate to that line of code. It seems fine for other developers, too.
+#if !PLATFORM(ANDROID)
     printf_stderr_common("%s(%d) : %s\n", file, line, function);
+#else
+    printf_stderr_common("%s(%d) : %s", file, line, function);
+#endif
 #endif
 }
 

@@ -48,6 +48,10 @@
 #include <wtf/text/CString.h>
 #endif
 
+#if PLATFORM(ANDROID)
+#include "GLContextEGLAndroid.h"
+#endif
+
 namespace WebCore {
 
 class TextureMapperGLData {
@@ -124,6 +128,10 @@ TextureMapperGLData::TextureMapperGLData(GraphicsContext3D& context)
 
 TextureMapperGLData::~TextureMapperGLData()
 {
+#if PLATFORM(ANDROID)
+    if (GLContextEGLAndroid::isContextLost())
+        return;
+#endif
     for (auto& entry : m_vbos)
         m_context.deleteBuffer(entry.value);
 }

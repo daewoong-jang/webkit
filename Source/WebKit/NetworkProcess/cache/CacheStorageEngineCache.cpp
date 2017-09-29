@@ -26,6 +26,7 @@
 #include "config.h"
 #include "CacheStorageEngine.h"
 
+#if ENABLE(NETWORK_CACHE)
 #include "CacheStorageEngineCaches.h"
 #include "NetworkCacheCoders.h"
 #include "NetworkCacheIOChannel.h"
@@ -582,3 +583,5 @@ Vector<Key> Cache::keys() const
 } // namespace CacheStorage
 
 } // namespace WebKit
+
+#endif

@@ -26,6 +26,8 @@
 #include "config.h"
 #include "CacheStorageEngine.h"
 
+#if ENABLE(NETWORK_CACHE)
+
 #include "NetworkCacheCoders.h"
 #include <wtf/UUID.h>
 #include <wtf/text/StringBuilder.h>
@@ -423,3 +425,5 @@ void Caches::appendRepresentation(StringBuilder& builder) const
 } // namespace CacheStorage
 
 } // namespace WebKit
+
+#endif

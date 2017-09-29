@@ -32,6 +32,10 @@
 #include "CurlSSLHandle.h"
 #include <openssl/ssl.h>
 
+#if PLATFORM(ANDROID)
+#include "WebCorePlatformNatives.h"
+#endif
+
 namespace WebCore {
 
 void CurlSSLVerifier::setSslCtx(void* sslCtx)
@@ -64,7 +68,10 @@ int CurlSSLVerifier::certVerifyCallback(int ok, X509_STORE_CTX* storeCtx)
     ListHashSet<String> certificates;
     if (!getPemDataFromCtx(storeCtx, certificates))
         return 0;
-
+#if PLATFORM(ANDROID)
+    if (WebCorePlatform::requestAllowHostDecision(verifier->m_hostName.utf8().data()))
+        CurlContext::singleton().sslHandle().setHostAllowsAnyHTTPSCertificate(verifier->m_hostName);
+#endif
     ok = CurlContext::singleton().sslHandle().canIgnoredHTTPSCertificate(verifier->m_hostName, certificates);
 #endif
 

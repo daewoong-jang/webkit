@@ -93,7 +93,7 @@
 #include <JavaScriptCore/RemoteInspector.h>
 #endif
 
-#if OS(LINUX)
+#if OS(LINUX) && !PLATFORM(ANDROID)
 #include "MemoryPressureMonitor.h"
 #endif
 
@@ -461,7 +461,7 @@ NetworkProcessProxy& WebProcessPool::ensureNetworkProcess(WebsiteDataStore* with
     parameters.allowsCellularAccess = m_configuration->allowsCellularAccess();
 #endif
 
-#if OS(LINUX)
+#if OS(LINUX) && !PLATFORM(ANDROID)
     if (MemoryPressureMonitor::isEnabled())
         parameters.memoryPressureMonitorHandle = MemoryPressureMonitor::singleton().createHandle();
 #endif
@@ -543,9 +543,8 @@ void WebProcessPool::ensureStorageProcessAndWebsiteDataStore(WebsiteDataStore* r
             parameters.indexedDatabaseDirectory = m_configuration->indexedDBDatabaseDirectory();
             SandboxExtension::createHandleForReadWriteDirectory(parameters.indexedDatabaseDirectory, parameters.indexedDatabaseDirectoryExtensionHandle);
         }
-#endif
-
         m_storageProcess = StorageProcessProxy::create(this);
+#endif
         m_storageProcess->send(Messages::StorageProcess::InitializeWebsiteDataStore(parameters), 0);
     }
 
@@ -754,7 +753,7 @@ WebProcessProxy& WebProcessPool::createNewWebProcess(WebsiteDataStore& websiteDa
     parameters.pluginLoadClientPolicies = m_pluginLoadClientPolicies;
 #endif
 
-#if OS(LINUX)
+#if OS(LINUX) && !PLATFORM(ANDROID)
     parameters.shouldEnableMemoryPressureReliefLogging = true;
     if (MemoryPressureMonitor::isEnabled())
         parameters.memoryPressureMonitorHandle = MemoryPressureMonitor::singleton().createHandle();

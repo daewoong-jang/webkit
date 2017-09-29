@@ -204,7 +204,8 @@
 #elif !defined(__ARM_EABI__) \
     && !defined(__EABI__) \
     && !defined(__VFP_FP__) \
-    && !defined(_WIN32_WCE)
+    && !defined(_WIN32_WCE) \
+    && !defined(ANDROID)
 #define WTF_CPU_MIDDLE_ENDIAN 1
 
 #endif
@@ -430,6 +431,11 @@
 #define WTF_OS_WIN ERROR "USE WINDOWS WITH OS NOT WIN"
 #define WTF_OS_MAC ERROR "USE MAC_OS_X WITH OS NOT MAC"
 
+/* OS(ANDROID) - Android */
+#ifdef ANDROID
+#define WTF_OS_ANDROID 1
+#endif
+
 /* OS(UNIX) - Any Unix-like system */
 #if    OS(AIX)              \
     || OS(DARWIN)           \
@@ -438,6 +444,7 @@
     || OS(LINUX)            \
     || OS(NETBSD)           \
     || OS(OPENBSD)          \
+    || OS(ANDROID)          \
     || defined(unix)        \
     || defined(__unix)      \
     || defined(__unix__)
@@ -507,6 +514,13 @@
 /* PLATFORM(WATCHOS) */
 #if defined(TARGET_OS_WATCH) && TARGET_OS_WATCH
 #define WTF_PLATFORM_WATCHOS 1
+#endif
+
+/* PLATFORM(ANDROID) */
+#if PLATFORM(ANDROID)
+#if OS(WINDOWS)
+#undef WTF_PLATFORM_WIN
+#endif
 #endif
 
 /* Graphics engines */
@@ -1236,6 +1250,8 @@
 #if USE(GLIB)
 /* Use GLib's event loop abstraction. Primarily GTK port uses it. */
 #define USE_GLIB_EVENT_LOOP 1
+#elif PLATFORM(ANDROID)
+#define USE_ANDROID_EVENT_LOOP 1
 #elif OS(WINDOWS)
 /* Use Windows message pump abstraction.
  * Even if the port is AppleWin, we use the Windows message pump system for the event loop,

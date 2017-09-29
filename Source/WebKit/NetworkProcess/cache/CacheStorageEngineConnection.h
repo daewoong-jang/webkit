@@ -25,6 +25,8 @@
 
 #pragma once
 
+#if ENABLE(NETWORK_CACHE)
+
 #include "ArgumentCoders.h"
 #include "CacheStorageEngine.h"
 #include <WebCore/CacheStorageConnection.h>
@@ -69,3 +71,5 @@ private:
 };
 
 }
+
+#endif

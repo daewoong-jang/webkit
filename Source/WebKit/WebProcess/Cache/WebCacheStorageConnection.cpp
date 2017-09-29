@@ -36,7 +36,9 @@
 #include <wtf/MainThread.h>
 
 using namespace WebCore::DOMCacheEngine;
+#if ENABLE(NETWORK_CACHE)
 using namespace WebKit::CacheStorage;
+#endif
 
 namespace WebKit {
 
@@ -56,6 +58,7 @@ IPC::Connection& WebCacheStorageConnection::connection()
     return WebProcess::singleton().networkConnection().connection();
 }
 
+#if ENABLE(NETWORK_CACHE)
 void WebCacheStorageConnection::doOpen(uint64_t requestIdentifier, const String& origin, const String& cacheName)
 {
     connection().send(Messages::CacheStorageEngineConnection::Open(m_sessionID, requestIdentifier, origin, cacheName), 0);
@@ -95,6 +98,7 @@ void WebCacheStorageConnection::dereference(uint64_t cacheIdentifier)
 {
     connection().send(Messages::CacheStorageEngineConnection::Dereference(m_sessionID, cacheIdentifier), 0);
 }
+#endif
 
 void WebCacheStorageConnection::openCompleted(uint64_t requestIdentifier, const CacheIdentifierOrError& result)
 {
@@ -126,12 +130,14 @@ void WebCacheStorageConnection::putRecordsCompleted(uint64_t requestIdentifier, 
     CacheStorageConnection::putRecordsCompleted(requestIdentifier, WTFMove(result));
 }
 
+#if ENABLE(NETWORK_CACHE)
 void WebCacheStorageConnection::clearMemoryRepresentation(const String& origin, CompletionCallback&& callback)
 {
     uint64_t requestIdentifier = ++m_engineRepresentationNextIdentifier;
     m_clearRepresentationCallbacks.set(requestIdentifier, WTFMove(callback));
     connection().send(Messages::CacheStorageEngineConnection::ClearMemoryRepresentation(m_sessionID, requestIdentifier, origin), 0);
 }
+#endif
 
 void WebCacheStorageConnection::clearMemoryRepresentationCompleted(uint64_t requestIdentifier, std::optional<Error>&& result)
 {
@@ -139,12 +145,14 @@ void WebCacheStorageConnection::clearMemoryRepresentationCompleted(uint64_t requ
         callback(WTFMove(result));
 }
 
+#if ENABLE(NETWORK_CACHE)
 void WebCacheStorageConnection::engineRepresentation(WTF::Function<void(const String&)>&& callback)
 {
     uint64_t requestIdentifier = ++m_engineRepresentationNextIdentifier;
     m_engineRepresentationCallbacks.set(requestIdentifier, WTFMove(callback));
     connection().send(Messages::CacheStorageEngineConnection::EngineRepresentation(m_sessionID, requestIdentifier), 0);
 }
+#endif
 
 void WebCacheStorageConnection::engineRepresentationCompleted(uint64_t requestIdentifier, const String& result)
 {

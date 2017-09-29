@@ -31,7 +31,7 @@
 
 namespace WTF {
 
-bool setCloseOnExec(int fileDescriptor);
+WTF_EXPORT bool setCloseOnExec(int fileDescriptor);
 int dupCloseOnExec(int fileDescriptor);
 
 inline int closeWithRetry(int fileDescriptor)

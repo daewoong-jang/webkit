@@ -48,10 +48,12 @@ MemoryPressureHandler& MemoryPressureHandler::singleton()
 }
 
 MemoryPressureHandler::MemoryPressureHandler()
+#if !PLATFORM(ANDROID)
 #if OS(LINUX)
     : m_holdOffTimer(RunLoop::main(), this, &MemoryPressureHandler::holdOffTimerFired)
 #elif OS(WINDOWS)
     : m_windowsMeasurementTimer(RunLoop::main(), this, &MemoryPressureHandler::windowsMeasurementTimerFired)
+#endif
 #endif
 {
 }
@@ -283,7 +285,7 @@ void MemoryPressureHandler::ReliefLogger::logMemoryUsageChange()
         m_initialMemory->physical, currentMemory->physical, physicalDiff);
 }
 
-#if !PLATFORM(COCOA) && !OS(LINUX) && !OS(WINDOWS)
+#if !PLATFORM(COCOA) && !OS(LINUX) && !OS(WINDOWS) && !PLATFORM(ANDROID)
 void MemoryPressureHandler::install() { }
 void MemoryPressureHandler::uninstall() { }
 void MemoryPressureHandler::holdOff(unsigned) { }

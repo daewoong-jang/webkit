@@ -51,6 +51,10 @@
 #include <windows.h>
 #endif
 
+#if !USE(CF)
+#include <stdio.h>
+#endif
+
 #include "CompareAndSwapTest.h"
 #include "CustomGlobalObjectClassTest.h"
 #include "ExecutionTimeLimitTest.h"
@@ -118,6 +122,7 @@ static void assertEqualsAsUTF8String(JSValueRef value, const char* expectedValue
     JSStringRelease(valueAsString);
 }
 
+#if USE(CF)
 static void assertEqualsAsCharactersPtr(JSValueRef value, const char* expectedValue)
 {
     JSStringRef valueAsString = JSValueToStringCopy(context, value, NULL);
@@ -173,6 +178,7 @@ static bool timeZoneIsPST()
 
     return 0 == strcmp("PST", timeZoneName);
 }
+#endif
 
 static JSValueRef jsGlobalValue; // non-stack value for testing JSValueProtect()
 
@@ -1348,6 +1354,7 @@ static void testCFStrings(void)
 
 int main(int argc, char* argv[])
 {
+#if USE(CF)
 #if OS(WINDOWS)
     // Cygwin calls ::SetErrorMode(SEM_FAILCRITICALERRORS), which we will inherit. This is bad for
     // testing/debugging, as it causes the post-mortem debugger not to be invoked. We reset the
@@ -2119,6 +2126,7 @@ int main(int argc, char* argv[])
     }
 
     printf("PASS: Program exited normally.\n");
+#endif
     return 0;
 }
 

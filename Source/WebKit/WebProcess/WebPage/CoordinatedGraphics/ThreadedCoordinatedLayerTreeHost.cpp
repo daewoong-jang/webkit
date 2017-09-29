@@ -36,6 +36,11 @@
 #include <WebCore/FrameView.h>
 #include <WebCore/MainFrame.h>
 
+#if USE(COORDINATED_GRAPHICS_MULTIPROCESS)
+#include "CoordinatedCompositorHostProxy.h"
+#include "DrawingArea.h"
+#endif
+
 using namespace WebCore;
 
 namespace WebKit {
@@ -65,6 +70,7 @@ ThreadedCoordinatedLayerTreeHost::ThreadedCoordinatedLayerTreeHost(WebPage& webP
     scaledSize.scale(m_webPage.deviceScaleFactor());
     float scaleFactor = m_webPage.deviceScaleFactor() * m_viewportController.pageScaleFactor();
 
+#if !USE(COORDINATED_GRAPHICS_MULTIPROCESS)
     if (m_surface) {
         TextureMapper::PaintFlags paintFlags = 0;
 
@@ -75,6 +81,10 @@ ThreadedCoordinatedLayerTreeHost::ThreadedCoordinatedLayerTreeHost(WebPage& webP
         m_layerTreeContext.contextID = m_surface->surfaceID();
     } else
         m_compositor = ThreadedCompositor::create(m_compositorClient, webPage, scaledSize, scaleFactor);
+#else
+    m_compositor = std::make_unique<CoordinatedCompositorHostProxy>(webPage, m_compositorClient, scaledSize, scaleFactor);
+    m_layerTreeContext.contextID = m_webPage.pageID();
+#endif
 
     didChangeViewport();
 }
@@ -210,6 +220,10 @@ void ThreadedCoordinatedLayerTreeHost::setNativeSurfaceHandleForCompositing(uint
 
 void ThreadedCoordinatedLayerTreeHost::didChangeViewport()
 {
+#if USE(COORDINATED_GRAPHICS_MULTIPROCESS)
+    if (m_webPage.drawingArea()->ignoreViewportChanges())
+        return;
+#endif
     FloatRect visibleRect(m_viewportController.visibleContentsRect());
     if (visibleRect.isEmpty())
         return;
@@ -240,6 +254,9 @@ void ThreadedCoordinatedLayerTreeHost::didChangeViewport()
     if (m_lastPageScaleFactor != pageScale) {
         m_lastPageScaleFactor = pageScale;
         m_webPage.scalePage(pageScale, m_lastScrollPosition);
+#if USE(COORDINATED_GRAPHICS_MULTIPROCESS)
+        m_compositor->setScaleFactor(m_webPage.deviceScaleFactor() * m_viewportController.pageScaleFactor());
+#endif
     }
 }
 

@@ -141,6 +141,10 @@ public:
     virtual void resetUpdateAtlasForTesting() = 0;
 #endif
 
+#if USE(COORDINATED_GRAPHICS_MULTIPROCESS)
+    virtual bool ignoreViewportChanges() const { return false; };
+#endif
+
 #if USE(COORDINATED_GRAPHICS) || USE(TEXTURE_MAPPER)
     virtual void deviceOrPageScaleFactorChanged() = 0;
 #endif
@@ -166,7 +170,7 @@ private:
                                          const WebCore::IntSize& /*scrollOffset*/) { }
     virtual void didUpdate() { }
 
-#if PLATFORM(COCOA)
+#if PLATFORM(COCOA) || PLATFORM(ANDROID)
     // Used by TiledCoreAnimationDrawingArea.
     virtual void setDeviceScaleFactor(float) { }
     virtual void setColorSpace(const ColorSpaceData&) { }

@@ -68,6 +68,8 @@ public:
     NativeWebKeyboardEvent(::WebEvent *);
 #elif PLATFORM(WPE)
     NativeWebKeyboardEvent(struct wpe_input_keyboard_event*);
+#elif PLATFORM(ANDROID)
+    NativeWebKeyboardEvent(WebKeyboardEvent&&, int64_t);
 #endif
 
 #if USE(APPKIT)
@@ -80,6 +82,9 @@ public:
     ::WebEvent* nativeEvent() const { return m_nativeEvent.get(); }
 #elif PLATFORM(WPE)
     const void* nativeEvent() const { return nullptr; }
+#elif PLATFORM(ANDROID)
+    const void* nativeEvent() const { return this; }
+    int64_t downTime() const { return m_downTime; }
 #endif
 
 private:
@@ -91,6 +96,8 @@ private:
     bool m_fakeEventForComposition;
 #elif PLATFORM(IOS)
     RetainPtr<::WebEvent> m_nativeEvent;
+#elif PLATFORM(ANDROID)
+    int64_t m_downTime;
 #endif
 };
 

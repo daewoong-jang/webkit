@@ -95,7 +95,22 @@ std::optional<NavigationActionData> NavigationActionData::decode(IPC::Decoder& d
     if (!isRedirect)
         return std::nullopt;
 
+#if COMPILER(MSVC)
+    NavigationActionData navigationActionData;
+    navigationActionData.navigationType = WTFMove(navigationType);
+    navigationActionData.modifiers = WTFMove(modifiers);
+    navigationActionData.mouseButton = WTFMove(mouseButton);
+    navigationActionData.syntheticClickType = WTFMove(syntheticClickType);
+    navigationActionData.userGestureTokenIdentifier = WTFMove(*userGestureTokenIdentifier);
+    navigationActionData.canHandleRequest = WTFMove(*canHandleRequest);
+    navigationActionData.shouldOpenExternalURLsPolicy = WTFMove(shouldOpenExternalURLsPolicy);
+    navigationActionData.downloadAttribute = WTFMove(*downloadAttribute);
+    navigationActionData.clickLocationInRootViewCoordinates = WTFMove(clickLocationInRootViewCoordinates);
+    navigationActionData.isRedirect = WTFMove(*isRedirect);
+    return navigationActionData;
+#else
     return {{ WTFMove(navigationType), WTFMove(modifiers), WTFMove(mouseButton), WTFMove(syntheticClickType), WTFMove(*userGestureTokenIdentifier), WTFMove(*canHandleRequest), WTFMove(shouldOpenExternalURLsPolicy), WTFMove(*downloadAttribute), WTFMove(clickLocationInRootViewCoordinates), WTFMove(*isRedirect) }};
+#endif
 }
 
 } // namespace WebKit

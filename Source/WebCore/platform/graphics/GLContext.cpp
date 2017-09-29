@@ -31,7 +31,9 @@
 #elif USE(OPENGL_ES_2)
 #define GL_GLEXT_PROTOTYPES 1
 #include <GLES2/gl2.h>
+#if !PLATFORM(ANDROID)
 #include <GLES3/gl3.h>
+#endif
 #endif
 
 #if USE(GLX)

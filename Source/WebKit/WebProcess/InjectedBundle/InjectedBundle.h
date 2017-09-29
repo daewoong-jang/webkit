@@ -62,6 +62,8 @@ namespace WebKit {
 typedef NSBundle *PlatformBundle;
 #elif USE(GLIB)
 typedef ::GModule* PlatformBundle;
+#else
+typedef void* PlatformBundle;
 #endif
 
 class InjectedBundleScriptWorld;

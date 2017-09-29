@@ -31,6 +31,7 @@
 #include "Frame.h"
 #include "FrameLoader.h"
 #include "FrameLoaderClient.h"
+#include "HeapInlines.h"
 #include <wtf/Ref.h>
 
 namespace WebCore {

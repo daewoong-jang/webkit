@@ -116,6 +116,7 @@ macro(WEBKIT_WRAP_SOURCELIST)
         get_filename_component(_path ${_file} PATH)
 
         if (NOT _file MATCHES "${DERIVED_SOURCES_WEBCORE_DIR}")
+            string(REPLACE "${CMAKE_SOURCE_DIR}/" "" _path "${_path}")
             string(REGEX REPLACE "/" "\\\\\\\\" _sourcegroup "${_path}")
             source_group("${_sourcegroup}" FILES ${_file})
         endif ()

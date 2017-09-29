@@ -705,6 +705,12 @@ public:
     void replaceSelectionWithPasteboardData(const Vector<String>& types, const IPC::DataReference&);
 #endif
 #endif
+#if PLATFORM(ANDROID)
+    void setComposition(const WTF::String& text, const WTF::Vector<WebCore::CompositionUnderline>& underlines, uint64_t selectionStart, uint64_t selectionEnd, uint64_t replacementStart, uint64_t replacementEnd);
+    void confirmComposition(const String& text);
+    void finishComposition();
+    void cancelComposition();
+#endif
 
 #if HAVE(ACCESSIBILITY) && PLATFORM(GTK)
     void updateAccessibilityTree();
@@ -763,6 +769,9 @@ public:
 #if PLATFORM(IOS)
     void computePagesForPrintingAndDrawToPDF(uint64_t frameID, const PrintInfo&, CallbackID, Ref<Messages::WebPage::ComputePagesForPrintingAndDrawToPDF::DelayedReply>&&);
 #endif
+#elif PLATFORM(ANDROID)
+    void drawRectToImage(uint64_t frameID, const PrintInfo&, const WebCore::IntRect&, const WebCore::IntSize&, CallbackID);
+    void drawPagesToPDF(uint64_t frameID, const PrintInfo&, uint32_t first, uint32_t count, CallbackID);
 #elif PLATFORM(GTK)
     void drawPagesForPrinting(uint64_t frameID, const PrintInfo&, CallbackID);
     void didFinishPrintOperation(const WebCore::ResourceError&, CallbackID);

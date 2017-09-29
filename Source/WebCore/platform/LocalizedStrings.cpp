@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2003, 2006, 2009, 2010, 2012, 2013 Apple Inc. All rights reserved.
  * Copyright (C) 2010 Igalia S.L
  *

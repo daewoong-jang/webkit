@@ -58,7 +58,7 @@ class FontSelector;
 class OpenTypeVerticalData;
 class Font;
 
-#if PLATFORM(WIN)
+#if PLATFORM(WIN) || !USE(FREETYPE)
 #if USE(IMLANG_FONT_LINK2)
 typedef IMLangFontLink2 IMLangFontLinkType;
 #else
@@ -193,7 +193,7 @@ public:
 #if PLATFORM(COCOA)
     WEBCORE_EXPORT static void setFontWhitelist(const Vector<String>&);
 #endif
-#if PLATFORM(WIN)
+#if PLATFORM(WIN) || !USE(FREETYPE)
     IMLangFontLinkType* getFontLinkInterface();
     static void comInitialize();
     static void comUninitialize();
@@ -220,7 +220,7 @@ public:
     WEBCORE_EXPORT void purgeInactiveFontData(unsigned count = UINT_MAX);
     void platformPurgeInactiveFontData();
 
-#if PLATFORM(WIN)
+#if PLATFORM(WIN) || !USE(FREETYPE)
     RefPtr<Font> fontFromDescriptionAndLogFont(const FontDescription&, const LOGFONT&, AtomicString& outFontFamilyName);
 #endif
 

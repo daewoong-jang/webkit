@@ -25,6 +25,8 @@
 
 #pragma once
 
+#if ENABLE(NETWORK_CACHE)
+
 #include "CacheStorageEngineCache.h"
 #include "NetworkCacheStorage.h"
 
@@ -88,3 +90,5 @@ private:
 } // namespace CacheStorage
 
 } // namespace WebKit
+
+#endif

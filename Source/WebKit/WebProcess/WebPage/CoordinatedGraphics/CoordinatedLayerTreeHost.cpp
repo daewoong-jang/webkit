@@ -41,6 +41,10 @@
 #include "ThreadSafeCoordinatedSurface.h"
 #endif
 
+#if USE(COORDINATED_GRAPHICS_MULTIPROCESS)
+#include "SharedCoordinatedSurface.h"
+#endif
+
 #if USE(GLIB_EVENT_LOOP)
 #include <wtf/glib/RunLoopSourcePriority.h>
 #endif
@@ -221,7 +225,9 @@ void CoordinatedLayerTreeHost::commitSceneState(const CoordinatedGraphicsState& 
 
 RefPtr<CoordinatedSurface> CoordinatedLayerTreeHost::createCoordinatedSurface(const IntSize& size, CoordinatedSurface::Flags flags)
 {
-#if USE(COORDINATED_GRAPHICS_THREADED)
+#if USE(COORDINATED_GRAPHICS_MULTIPROCESS)
+    return SharedCoordinatedSurface::create(size, flags);
+#elif USE(COORDINATED_GRAPHICS_THREADED)
     return ThreadSafeCoordinatedSurface::create(size, flags);
 #else
     UNUSED_PARAM(size);
@@ -261,6 +267,13 @@ void CoordinatedLayerTreeHost::commitScrollOffset(uint32_t layerID, const WebCor
 {
     m_coordinator.commitScrollOffset(layerID, offset);
 }
+
+#if USE(COORDINATED_GRAPHICS_MULTIPROCESS)
+void CoordinatedLayerTreeHost::reset()
+{
+    m_coordinator.reset();
+}
+#endif
 
 void CoordinatedLayerTreeHost::clearUpdateAtlases()
 {

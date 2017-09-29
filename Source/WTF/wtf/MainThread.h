@@ -61,6 +61,12 @@ WTF_EXPORT_PRIVATE void initializeWebThread();
 WTF_EXPORT_PRIVATE void initializeApplicationUIThreadIdentifier();
 WTF_EXPORT_PRIVATE void initializeWebThreadIdentifier();
 void initializeWebThreadPlatform();
+#elif PLATFORM(ANDROID)
+WTF_EXPORT_PRIVATE bool isWebThread();
+WTF_EXPORT_PRIVATE bool isUIThread();
+WTF_EXPORT_PRIVATE bool isApplicationUIThread();
+WTF_EXPORT_PRIVATE void initializeWebThread();
+WTF_EXPORT_PRIVATE void initializeUIThread();
 #else
 inline bool isWebThread() { return isMainThread(); }
 inline bool isUIThread() { return isMainThread(); }

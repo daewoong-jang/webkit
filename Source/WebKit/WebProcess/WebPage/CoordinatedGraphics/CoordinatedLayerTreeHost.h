@@ -66,6 +66,10 @@ protected:
 
     WebCore::GraphicsLayerFactory* graphicsLayerFactory() override;
 
+#if USE(COORDINATED_GRAPHICS_MULTIPROCESS)
+    void reset() override;
+#endif
+
     void scheduleAnimation() override;
 
     void setViewOverlayRootLayer(WebCore::GraphicsLayer*) override;

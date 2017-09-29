@@ -41,6 +41,12 @@
 #include <wtf/glib/GRefPtr.h>
 #endif
 
+#if USE(ANDROID_EVENT_LOOP)
+namespace WTF {
+class ThreadLoop;
+}
+#endif
+
 namespace WTF {
 
 class RunLoop : public FunctionDispatcher {
@@ -127,6 +133,13 @@ public:
         GRefPtr<GSource> m_source;
         bool m_isRepeating { false };
         Seconds m_fireInterval { 0 };
+#elif USE(ANDROID_EVENT_LOOP)
+        bool isActive(const AbstractLocker&) const;
+        static void timerFired(RunLoop*, int32_t ID);
+        int32_t m_ID;
+        MonotonicTime m_nextFireDate;
+        Seconds m_interval;
+        bool m_isRepeating;
 #elif USE(GENERIC_EVENT_LOOP)
         bool isActive(const AbstractLocker&) const;
         void stop(const AbstractLocker&);
@@ -182,6 +195,12 @@ private:
     GRefPtr<GMainContext> m_mainContext;
     Vector<GRefPtr<GMainLoop>> m_mainLoops;
     GRefPtr<GSource> m_source;
+#elif USE(ANDROID_EVENT_LOOP)
+    ThreadLoop& m_loop;
+
+    typedef HashMap<int, TimerBase*> TimerMap;
+    Lock m_activeTimersLock;
+    TimerMap m_activeTimers;
 #elif USE(GENERIC_EVENT_LOOP)
     void schedule(Ref<TimerBase::ScheduledTask>&&);
     void schedule(const AbstractLocker&, Ref<TimerBase::ScheduledTask>&&);

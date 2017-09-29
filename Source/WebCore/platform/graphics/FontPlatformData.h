@@ -29,7 +29,7 @@
 #include <wtf/RetainPtr.h>
 
 
-#if PLATFORM(WIN)
+#if PLATFORM(WIN) || !USE(FREETYPE)
 #include "COMPtr.h"
 #include "SharedGDIObject.h"
 #endif
@@ -55,7 +55,7 @@ typedef const struct __CTFont* CTFontRef;
 #include <CoreGraphics/CoreGraphics.h>
 #endif
 
-#if PLATFORM(WIN)
+#if PLATFORM(WIN) || !USE(FREETYPE)
 #include <wtf/win/GDIObject.h>
 typedef struct HFONT__* HFONT;
 interface IDWriteFont;
@@ -89,7 +89,7 @@ public:
     FontPlatformData(CGFontRef, float size, bool syntheticBold, bool syntheticOblique, FontOrientation, FontWidthVariant, TextRenderingMode);
 #endif
 
-#if PLATFORM(WIN)
+#if PLATFORM(WIN) || !USE(FREETYPE)
     FontPlatformData(GDIObject<HFONT>, float size, bool syntheticBold, bool syntheticOblique, bool useGDI);
 #endif
 
@@ -101,7 +101,7 @@ public:
     FontPlatformData(GDIObject<HFONT>, IDWriteFont*, float size, bool syntheticBold, bool syntheticOblique, bool useGDI);
 #endif
 
-#if PLATFORM(WIN) && USE(CAIRO)
+#if PLATFORM(WIN) && USE(CAIRO) || !USE(FREETYPE)
     FontPlatformData(GDIObject<HFONT>, cairo_font_face_t*, float size, bool bold, bool italic);
 #endif
 
@@ -115,7 +115,7 @@ public:
     ~FontPlatformData();
 #endif
 
-#if PLATFORM(WIN)
+#if PLATFORM(WIN) || !USE(FREETYPE)
     HFONT hfont() const { return m_font ? m_font->get() : 0; }
     bool useGDI() const { return m_useGDI; }
 #endif
@@ -131,7 +131,7 @@ public:
     bool hasCustomTracking() const { return isSystemFont(); }
 #endif
 
-#if PLATFORM(WIN) || PLATFORM(COCOA)
+#if PLATFORM(WIN) || PLATFORM(COCOA) || !USE(FREETYPE)
     bool isSystemFont() const { return m_isSystemFont; }
 #endif
 
@@ -195,7 +195,7 @@ public:
 #endif
     }
 
-#if PLATFORM(COCOA) || PLATFORM(WIN) || USE(FREETYPE)
+#if PLATFORM(COCOA) || PLATFORM(WIN) || PLATFORM(ANDROID) || USE(FREETYPE)
     RefPtr<SharedBuffer> openTypeTable(uint32_t table) const;
 #endif
 
@@ -210,7 +210,7 @@ private:
     CGFloat ctFontSize() const;
 #endif
 
-#if PLATFORM(WIN)
+#if PLATFORM(WIN) || !USE(FREETYPE)
     void platformDataInit(HFONT, float size, HDC, WCHAR* faceName);
 #endif
 
@@ -222,7 +222,7 @@ private:
     // FIXME: Get rid of one of these. These two fonts are subtly different, and it is not obvious which one to use where.
     RetainPtr<CTFontRef> m_font;
     mutable RetainPtr<CTFontRef> m_ctFont;
-#elif PLATFORM(WIN)
+#elif PLATFORM(WIN) || !USE(FREETYPE)
     RefPtr<SharedGDIObject<HFONT>> m_font;
 #endif
 
@@ -265,7 +265,7 @@ private:
     bool m_isEmoji { false };
 #endif
 
-#if PLATFORM(WIN)
+#if PLATFORM(WIN) || !USE(FREETYPE)
     bool m_useGDI { false };
 #endif
 

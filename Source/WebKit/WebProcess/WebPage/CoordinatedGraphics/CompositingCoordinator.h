@@ -92,6 +92,9 @@ public:
 
     double nextAnimationServiceTime() const;
 
+#if USE(COORDINATED_GRAPHICS_MULTIPROCESS)
+    void reset();
+#endif
 private:
     enum ReleaseAtlasPolicy {
         ReleaseInactive,

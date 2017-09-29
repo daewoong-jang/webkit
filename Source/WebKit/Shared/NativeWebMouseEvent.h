@@ -53,6 +53,8 @@ public:
     NativeWebMouseEvent(GdkEvent*, int);
 #elif PLATFORM(WPE)
     NativeWebMouseEvent(struct wpe_input_pointer_event*, float deviceScaleFactor);
+#elif PLATFORM(ANDROID)
+    NativeWebMouseEvent(WebMouseEvent&&);
 #endif
 
 #if USE(APPKIT)

@@ -147,7 +147,14 @@ template<class Decoder> inline std::optional<CacheIdentifierOperationResult> Cac
     decoder >> hadStorageError;
     if (!hadStorageError)
         return std::nullopt;
+#if COMPILER(MSVC)
+    CacheIdentifierOperationResult result;
+    result.identifier = WTFMove(*identifier);
+    result.hadStorageError= WTFMove(*hadStorageError);
+    return result;
+#else
     return {{ WTFMove(*identifier), WTFMove(*hadStorageError) }};
+#endif
 }
 
 } // namespace DOMCacheEngine

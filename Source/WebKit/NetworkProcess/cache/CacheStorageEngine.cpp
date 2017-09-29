@@ -26,6 +26,8 @@
 #include "config.h"
 #include "CacheStorageEngine.h"
 
+#if ENABLE(NETWORK_CACHE)
+
 #include "NetworkCacheIOChannel.h"
 #include "NetworkProcess.h"
 #include <WebCore/CacheQueryOptions.h>
@@ -373,3 +375,5 @@ String Engine::representation()
 } // namespace CacheStorage
 
 } // namespace WebKit
+
+#endif

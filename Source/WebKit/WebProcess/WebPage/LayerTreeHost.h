@@ -86,6 +86,10 @@ public:
     virtual void didChangeViewportAttributes(WebCore::ViewportAttributes&&) { };
 #endif
 
+#if USE(COORDINATED_GRAPHICS_MULTIPROCESS)
+    virtual void reset() { };
+#endif
+
 #if USE(COORDINATED_GRAPHICS)
     virtual void scheduleAnimation() = 0;
     virtual void setIsDiscardable(bool) { };

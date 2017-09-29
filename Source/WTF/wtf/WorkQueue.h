@@ -46,6 +46,11 @@
 #include <wtf/RunLoop.h>
 #endif
 
+#if USE(ANDROID_EVENT_LOOP)
+#include <DispatchQueue.h>
+#include <wtf/RunLoop.h>
+#endif
+
 namespace WTF {
 
 class WorkQueue final : public FunctionDispatcher {
@@ -74,6 +79,10 @@ public:
     dispatch_queue_t dispatchQueue() const { return m_dispatchQueue; }
 #elif USE(GLIB_EVENT_LOOP) || USE(GENERIC_EVENT_LOOP)
     RunLoop& runLoop() const { return *m_runLoop; }
+#elif USE(ANDROID_EVENT_LOOP)
+    WTF_EXPORT_PRIVATE void registerSocketEventHandler(int, std::function<void ()>);
+    WTF_EXPORT_PRIVATE void unregisterSocketEventHandler(int);
+    RunLoop& runLoop() const { return m_dispatchQueue->runLoop(); }
 #endif
 
 private:
@@ -106,6 +115,8 @@ private:
     Lock m_initializeRunLoopConditionMutex;
     Condition m_initializeRunLoopCondition;
     RunLoop* m_runLoop;
+#elif USE(ANDROID_EVENT_LOOP)
+    RefPtr<DispatchQueue> m_dispatchQueue;
 #endif
 };
 

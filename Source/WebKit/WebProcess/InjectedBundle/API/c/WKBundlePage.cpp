@@ -476,12 +476,12 @@ void WKBundlePageForceRepaint(WKBundlePageRef page)
     toImpl(page)->forceRepaintWithoutCallback();
 }
 
-void WKBundlePageSimulateMouseDown(WKBundlePageRef page, int button, WKPoint position, int clickCount, WKEventModifiers modifiers, double time)
+void WKBundlePageSimulateMouseDown(WKBundlePageRef page, int button, WKPoint position, int clickCount, WebKit::WKEventModifiers modifiers, double time)
 {
     toImpl(page)->simulateMouseDown(button, toIntPoint(position), clickCount, modifiers, WallTime::fromRawSeconds(time));
 }
 
-void WKBundlePageSimulateMouseUp(WKBundlePageRef page, int button, WKPoint position, int clickCount, WKEventModifiers modifiers, double time)
+void WKBundlePageSimulateMouseUp(WKBundlePageRef page, int button, WKPoint position, int clickCount, WebKit::WKEventModifiers modifiers, double time)
 {
     toImpl(page)->simulateMouseUp(button, toIntPoint(position), clickCount, modifiers, WallTime::fromRawSeconds(time));
 }

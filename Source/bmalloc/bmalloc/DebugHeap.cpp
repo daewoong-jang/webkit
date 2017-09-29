@@ -89,7 +89,11 @@ void* DebugHeap::malloc(size_t size)
 void* DebugHeap::memalign(size_t alignment, size_t size, bool crashOnFailure)
 {
     void* result;
+#if !defined(ANDROID)
     if (posix_memalign(&result, alignment, size)) {
+#else
+    if ((result = ::memalign(alignment, size))) {
+#endif
         if (crashOnFailure)
             BCRASH();
         return nullptr;

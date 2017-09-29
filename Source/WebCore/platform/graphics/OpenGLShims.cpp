@@ -42,6 +42,7 @@ static void* getProcAddress(const char* procName)
 {
     return GetProcAddress(GetModuleHandleA("libGLESv2"), procName);
 }
+#elif PLATFORM(ANDROID)
 #else
 typedef void* (*glGetProcAddressType) (const char* procName);
 static void* getProcAddress(const char* procName)
@@ -60,6 +61,15 @@ static void* getProcAddress(const char* procName)
     return getProcAddressFunction(procName);
 }
 #endif
+
+#if PLATFORM(ANDROID)
+
+#define ASSIGN_FUNCTION_TABLE_ENTRY(FunctionName, success) \
+    openGLFunctionTable()->FunctionName = reinterpret_cast<FunctionName##Type>(::FunctionName)
+
+#define ASSIGN_FUNCTION_TABLE_ENTRY_EXT(FunctionName)
+
+#else
 
 static void* lookupOpenGLFunctionAddress(const char* functionName, bool* success = 0)
 {
@@ -97,6 +107,8 @@ static void* lookupOpenGLFunctionAddress(const char* functionName, bool* success
 
 #define ASSIGN_FUNCTION_TABLE_ENTRY_EXT(FunctionName) \
     openGLFunctionTable()->FunctionName = reinterpret_cast<FunctionName##Type>(lookupOpenGLFunctionAddress(#FunctionName))
+
+#endif
 
 bool initializeOpenGLShims()
 {
@@ -139,9 +151,11 @@ bool initializeOpenGLShims()
     ASSIGN_FUNCTION_TABLE_ENTRY_EXT(glDeleteVertexArrays);
     ASSIGN_FUNCTION_TABLE_ENTRY(glDetachShader, success);
     ASSIGN_FUNCTION_TABLE_ENTRY(glDisableVertexAttribArray, success);
+#if !PLATFORM(ANDROID)
     ASSIGN_FUNCTION_TABLE_ENTRY(glDrawArraysInstanced, success);
     ASSIGN_FUNCTION_TABLE_ENTRY(glDrawBuffers, success);
     ASSIGN_FUNCTION_TABLE_ENTRY(glDrawElementsInstanced, success);
+#endif
     ASSIGN_FUNCTION_TABLE_ENTRY(glEnableVertexAttribArray, success);
     ASSIGN_FUNCTION_TABLE_ENTRY(glFramebufferRenderbuffer, success);
     ASSIGN_FUNCTION_TABLE_ENTRY(glFramebufferTexture2D, success);
@@ -219,7 +233,9 @@ bool initializeOpenGLShims()
     ASSIGN_FUNCTION_TABLE_ENTRY(glVertexAttrib3fv, success);
     ASSIGN_FUNCTION_TABLE_ENTRY(glVertexAttrib4f, success);
     ASSIGN_FUNCTION_TABLE_ENTRY(glVertexAttrib4fv, success);
+#if !PLATFORM(ANDROID)
     ASSIGN_FUNCTION_TABLE_ENTRY(glVertexAttribDivisor, success);
+#endif
     ASSIGN_FUNCTION_TABLE_ENTRY(glVertexAttribPointer, success);
 
     if (!success)

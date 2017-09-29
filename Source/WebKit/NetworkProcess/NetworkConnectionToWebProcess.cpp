@@ -129,10 +129,12 @@ void NetworkConnectionToWebProcess::didReceiveMessage(IPC::Connection& connectio
     }
 #endif
 
+#if ENABLE(NETWORK_CACHE)
     if (decoder.messageReceiverName() == Messages::CacheStorageEngineConnection::messageReceiverName()) {
         cacheStorageConnection().didReceiveMessage(connection, decoder);
         return;
     }
+#endif
 
     ASSERT_NOT_REACHED();
 }
@@ -146,12 +148,14 @@ NetworkRTCProvider& NetworkConnectionToWebProcess::rtcProvider()
 }
 #endif
 
+#if ENABLE(NETWORK_CACHE)
 CacheStorageEngineConnection& NetworkConnectionToWebProcess::cacheStorageConnection()
 {
     if (!m_cacheStorageConnection)
         m_cacheStorageConnection = CacheStorageEngineConnection::create(*this);
     return *m_cacheStorageConnection;
 }
+#endif
 
 void NetworkConnectionToWebProcess::didReceiveSyncMessage(IPC::Connection& connection, IPC::Decoder& decoder, std::unique_ptr<IPC::Encoder>& reply)
 {

@@ -51,6 +51,10 @@ if (WTF_CPU_ARM)
     int main() {}
    ")
 
+    if (ANDROID)
+        set(CMAKE_REQUIRED_FLAGS -mthumb)
+    endif ()
+
     CHECK_CXX_SOURCE_COMPILES("${ARM_THUMB2_TEST_SOURCE}" ARM_THUMB2_DETECTED)
     if (NOT ARM_THUMB2_DETECTED)
         set(ARM_TRADITIONAL_DETECTED TRUE)

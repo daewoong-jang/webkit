@@ -90,6 +90,11 @@
 #include "MediaPlayerPrivateAVFoundationCF.h"
 #endif
 
+#if PLATFORM(ANDROID)
+#include "MediaPlayerPrivateAndroid.h"
+#define PlatformMediaEngineClassName MediaPlayerPrivateAndroid
+#endif
+
 namespace WebCore {
 
 const PlatformMedia NoPlatformMedia = { PlatformMedia::None, {0} };

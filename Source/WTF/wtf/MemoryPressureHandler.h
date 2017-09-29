@@ -88,7 +88,7 @@ public:
     }
     void setUnderMemoryPressure(bool);
 
-#if OS(LINUX)
+#if OS(LINUX) && !PLATFORM(ANDROID)
     void setMemoryPressureMonitorHandle(int fd);
 #endif
 
@@ -169,7 +169,7 @@ private:
     void doesExceedInactiveLimitWhileActive();
     void doesNotExceedInactiveLimitWhileActive();
 
-#if OS(LINUX)
+#if OS(LINUX) && !PLATFORM(ANDROID)
     class EventFDPoller {
         WTF_MAKE_NONCOPYABLE(EventFDPoller); WTF_MAKE_FAST_ALLOCATED;
     public:
@@ -206,13 +206,13 @@ private:
     WTF::Function<void()> m_didExceedInactiveLimitWhileActiveCallback;
     bool m_hasInvokedDidExceedInactiveLimitWhileActiveCallback { false };
 
-#if OS(WINDOWS)
+#if OS(WINDOWS) && !PLATFORM(ANDROID)
     void windowsMeasurementTimerFired();
     RunLoop::Timer<MemoryPressureHandler> m_windowsMeasurementTimer;
     Win32Handle m_lowMemoryHandle;
 #endif
 
-#if OS(LINUX)
+#if OS(LINUX) && !PLATFORM(ANDROID)
     std::optional<int> m_eventFD;
     std::optional<int> m_pressureLevelFD;
     std::unique_ptr<EventFDPoller> m_eventFDPoller;

@@ -52,6 +52,7 @@ private:
     IPC::Connection& connection();
 
     // WebCore::CacheStorageConnection
+#if ENABLE(NETWORK_CACHE)
     void doOpen(uint64_t requestIdentifier, const String& origin, const String& cacheName) final;
     void doRemove(uint64_t requestIdentifier, uint64_t cacheIdentifier) final;
     void doRetrieveCaches(uint64_t requestIdentifier, const String& origin, uint64_t updateCounter) final;
@@ -65,6 +66,7 @@ private:
 
     void clearMemoryRepresentation(const String& origin, WebCore::DOMCacheEngine::CompletionCallback&&) final;
     void engineRepresentation(WTF::Function<void(const String&)>&&) final;
+#endif
 
     void openCompleted(uint64_t requestIdentifier, const WebCore::DOMCacheEngine::CacheIdentifierOrError&);
     void removeCompleted(uint64_t requestIdentifier, const WebCore::DOMCacheEngine::CacheIdentifierOrError&);

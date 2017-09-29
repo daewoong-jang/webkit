@@ -44,6 +44,10 @@ public:
     void setNativeSurfaceHandleForCompositing(uint64_t);
     void destroyNativeSurfaceHandleForCompositing();
 #endif
+#if USE(COORDINATED_GRAPHICS_MULTIPROCESS)
+    void adjustTransientZoom(double, WebCore::FloatPoint) override;
+    void commitTransientZoom(double, WebCore::FloatPoint) override;
+#endif
 
     void dispatchAfterEnsuringDrawing(WTF::Function<void(CallbackBase::Error)>&&) override;
 

@@ -97,7 +97,7 @@ sub applyPreprocessor
                 sleep 1;
             }
         };
-    } elsif ($Config::Config{"osname"} eq "MSWin32") {
+    } elsif ($Config::Config{"osname"} eq "MSWin32" and index($preprocessor, "cl.exe") != -1) {
         # Suppress STDERR so that if we're using cl.exe, the output
         # name isn't needlessly echoed.
         use Symbol 'gensym'; my $err = gensym;

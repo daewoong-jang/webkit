@@ -47,6 +47,9 @@
 #elif PLATFORM(GTK)
 // This define is from the X11 headers, but it's used below, so we must undefine it.
 #undef VERSION
+#elif PLATFORM(ANDROID)
+#undef NO_ERROR
+#undef WAIT_FAILED
 #endif
 
 #if PLATFORM(COCOA)
@@ -1387,7 +1390,7 @@ private:
 
     std::unique_ptr<ShaderNameHash> nameHashMapForShaders;
 
-#if ((PLATFORM(GTK) || PLATFORM(WIN) || PLATFORM(WPE)) && USE(OPENGL_ES_2))
+#if ((PLATFORM(GTK) || PLATFORM(WIN) || PLATFORM(WPE) || PLATFORM(ANDROID)) && USE(OPENGL_ES_2))
     friend class Extensions3DOpenGLES;
     std::unique_ptr<Extensions3DOpenGLES> m_extensions;
 #else

@@ -79,6 +79,7 @@
 #include <WebCore/CommonVM.h>
 #include <WebCore/CrossOriginPreflightResultCache.h>
 #include <WebCore/DNS.h>
+#include <WebCore/DOMWindow.h>
 #include <WebCore/DatabaseManager.h>
 #include <WebCore/DatabaseTracker.h>
 #include <WebCore/DiagnosticLoggingClient.h>
@@ -250,7 +251,7 @@ void WebProcess::initializeWebProcess(WebProcessCreationParameters&& parameters)
 
     WebCore::setPresentingApplicationPID(parameters.presentingApplicationPID);
 
-#if OS(LINUX)
+#if OS(LINUX) && !PLATFORM(ANDROID)
     if (parameters.memoryPressureMonitorHandle.fileDescriptor() != -1)
         MemoryPressureHandler::singleton().setMemoryPressureMonitorHandle(parameters.memoryPressureMonitorHandle.releaseFileDescriptor());
     MemoryPressureHandler::ReliefLogger::setLoggingEnabled(parameters.shouldEnableMemoryPressureReliefLogging);
